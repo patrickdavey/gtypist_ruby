@@ -1,26 +1,20 @@
 #!/usr/bin/env ruby
 require 'commander/import'
+require 'gtypist_ruby'
+require 'pry'
 
 # :name is optional, otherwise uses the basename of this executable
-program :name, 'Foo Bar'
-program :version, '1.0.0'
-program :description, 'Stupid command that prints foo or bar.'
+program :name, 'Gtpyist Ruby'
+program :version, GtypistRuby::VERSION
+program :description, 'Turns a rubygem into gtypist lessons.'
 
-command :foo do |c|
-  c.syntax = 'foobar foo'
-  c.description = 'Displays foo'
-  c.action do |args, options|
-    say 'foo'
-  end
-end
+default_command :generate_lessons
 
-command :bar do |c|
-  c.syntax = 'foobar bar [options]'
-  c.description = 'Display bar with optional prefix and suffix'
-  c.option '--prefix STRING', String, 'Adds a prefix to bar'
-  c.option '--suffix STRING', String, 'Adds a suffix to bar'
+command :generate_lessons do |c|
+  c.syntax = 'gtypist_ruby generate_lessons'
+  c.description = 'Generate lessons for a rubygem'
+  c.option '--gemname STRING', String, 'specify the gemname'
   c.action do |args, options|
-    options.default :prefix => '(', :suffix => ')'
-    say "#{options.prefix}bar#{options.suffix}"
+    raise ArgumentError.new("Gemname is required!") unless options.gemname
   end
 end
