@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-require 'commander/import'
 require 'gtypist_ruby'
+require 'commander/import'
 require 'pry'
 
 # :name is optional, otherwise uses the basename of this executable
@@ -16,5 +16,11 @@ command :generate_lessons do |c|
   c.option '--gemname STRING', String, 'specify the gemname'
   c.action do |args, options|
     raise ArgumentError.new("Gemname is required!") unless options.gemname
+
+    begin
+      GtypistRuby::Validator.new(options.gemname)
+    rescue GtypistRuby::MissingGemError => e
+      raise ArgumentError.new(e.message)
+    end
   end
 end
